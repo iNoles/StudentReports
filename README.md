@@ -1,4 +1,4 @@
-# StudentReports
+# StudentReports C++ Project
 
 The **StudentReports** C++ project is a simple system for managing student reports. It provides functionality to create, read, update, and delete student reports, including details such as grades.
 
