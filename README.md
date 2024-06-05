@@ -1,13 +1,14 @@
 # StudentReports C++ Project
 
-The **StudentReports** C++ project is a simple system for managing student reports. It provides functionality to create, read, update, and delete student reports, including details such as grades.
+StudentReports is a simple student record management system implemented in C++. It allows users to perform various operations such as creating, displaying, modifying, and deleting student records.
 
 ## Features
 
-- **Add Student Report:** Add new student reports with relevant details.
-- **View Reports:** View a list of all student reports.
-- **Update Reports:** Modify existing student reports.
-- **Delete Reports:** Remove student reports from the system.
+- **Create Student Record**: Allows users to input details of a student and save it to a file.
+- **Display Specific Record**: Enables users to search for and display the details of a specific student based on their roll number.
+- **Display All Records**: Displays details of all student records stored in the file.
+- **Modify Student Record**: Allows users to edit the details of a student record.
+- **Delete Student Record**: Enables users to delete a student record based on their roll number.
 
 ## Prerequisites
 
