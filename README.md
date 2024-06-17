@@ -1,6 +1,6 @@
-# StudentReports
+# Student Record Management System
 
-StudentReports is a simple student record management system implemented in C++. It allows users to perform various operations such as creating, displaying, modifying, and deleting student records.
+A menu-driven student record management system implemented in C++. This system allows users to perform various operations such as adding, viewing, editing, and deleting student records.
 
 ## Features
 
