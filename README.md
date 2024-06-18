@@ -1,6 +1,6 @@
 # Student Record Management System
 
-A menu-driven student record management system implemented in C++. This system allows users to perform various operations such as adding, viewing, editing, and deleting student records.
+A console-based, menu-driven student record management system implemented in C++. This system allows users to perform various operations such as adding, viewing, editing, and deleting student records.
 
 ## Features
 
