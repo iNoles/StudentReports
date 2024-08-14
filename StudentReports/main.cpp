@@ -7,6 +7,7 @@
 #include "students.hpp"
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -19,7 +20,11 @@ void delete_student(int); // Delete particular record
 void change_student(int); // Edit particular record
 
 int main() {
-    displayMenu();
+    try {
+        displayMenu();
+    } catch (const exception& e) {
+        cerr << "An error occurred: " << e.what() << endl;
+    }
     return 0;
 }
 
@@ -68,110 +73,78 @@ void displayMenu() {
     } while (ch != '6');
 }
 
-// Write student details to file
 void create_student() {
     student stud;
     ofstream oFile("student.dat", ios::binary | ios::app);
     if (!oFile) {
-        cout << "File could not be opened! Press any key to exit...";
-        cin.ignore();
-        cin.get();
-        return;
+        throw runtime_error("File could not be opened!");
     }
     stud.getdata();
     oFile.write(reinterpret_cast<char*>(&stud), sizeof(student));
-    oFile.close();
     cout << "\n\nStudent record has been created.";
-    cin.ignore();
-    cin.get();
 }
 
-// Read and display all records
 void display_all() {
     student stud;
     ifstream inFile("student.dat", ios::binary);
     if (!inFile) {
-        cout << "File could not be opened! Press any key to exit...";
-        cin.ignore();
-        cin.get();
-        return;
+        throw runtime_error("File could not be opened!");
     }
     cout << "\n\n\n\t\tDISPLAYING ALL RECORDS\n\n";
     while (inFile.read(reinterpret_cast<char*>(&stud), sizeof(student))) {
         stud.showdata();
         cout << "\n\n====================================\n";
     }
-    inFile.close();
-    cin.ignore();
-    cin.get();
 }
 
-// Read and display specific record based on roll number
 void display_sp(int n) {
     student stud;
     ifstream iFile("student.dat", ios::binary);
     if (!iFile) {
-        cout << "File could not be opened! Press any key to exit...";
-        cin.ignore();
-        cin.get();
-        return;
+        throw runtime_error("File could not be opened!");
     }
     bool found = false;
     while (iFile.read(reinterpret_cast<char*>(&stud), sizeof(student))) {
         if (stud.retrollno() == n) {
             stud.showdata();
             found = true;
+            break; // Record found, no need to continue reading
         }
     }
-    iFile.close();
     if (!found) {
         cout << "\n\nRecord does not exist.";
     }
-    cin.ignore();
-    cin.get();
 }
 
-// Modify record for specified roll number
 void change_student(int n) {
-    bool found = false;
     student stud;
     fstream fl("student.dat", ios::binary | ios::in | ios::out);
     if (!fl) {
-        cout << "File could not be opened! Press any key to exit...";
-        cin.ignore();
-        cin.get();
-        return;
+        throw runtime_error("File could not be opened!");
     }
-    while (!fl.eof() && !found) {
-        fl.read(reinterpret_cast<char*>(&stud), sizeof(student));
+    bool found = false;
+    while (fl.read(reinterpret_cast<char*>(&stud), sizeof(student))) {
         if (stud.retrollno() == n) {
             stud.showdata();
             cout << "\n\nEnter new student details:\n";
             stud.getdata();
-            int pos = static_cast<int>(fl.tellp()) - sizeof(stud);
-            fl.seekp(pos, ios::beg);
+            fl.seekp(-static_cast<int>(sizeof(student)), ios::cur); // Move back to the current record position
             fl.write(reinterpret_cast<char*>(&stud), sizeof(student));
             cout << "\n\n\tRecord updated.";
             found = true;
+            break; // Record found and updated, no need to continue reading
         }
     }
-    fl.close();
     if (!found) {
         cout << "\n\nRecord not found.";
     }
-    cin.ignore();
-    cin.get();
 }
 
-// Delete record with particular roll number
 void delete_student(int n) {
     student stud;
     ifstream iFile("student.dat", ios::binary);
     if (!iFile) {
-        cout << "File could not be opened! Press any key to exit...";
-        cin.ignore();
-        cin.get();
-        return;
+        throw runtime_error("File could not be opened!");
     }
     ofstream oFile("Temp.dat", ios::binary);
     while (iFile.read(reinterpret_cast<char*>(&stud), sizeof(student))) {
@@ -179,11 +152,9 @@ void delete_student(int n) {
             oFile.write(reinterpret_cast<char*>(&stud), sizeof(student));
         }
     }
-    oFile.close();
     iFile.close();
+    oFile.close();
     remove("student.dat");
     rename("Temp.dat", "student.dat");
     cout << "\n\n\tRecord deleted.";
-    cin.ignore();
-    cin.get();
 }
