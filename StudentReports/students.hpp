@@ -2,26 +2,25 @@
 #define STUDENT_HPP
 
 #include <iostream>
-#include <string>
+#include <vector>
 
 class Student {
-private:
     int rollNo;
     std::string name;
     int engMarks, mathMarks, sciMarks, lang2Marks, csMarks;
     double average;
     char grade;
 
-    void calculateGrade();
+    void calculate();
 
 public:
-    Student();
-    void inputData();
-    void displayData() const;
+    void getData();
+    void showData() const;
     int getRollNo() const;
-    void updateData();
-
-    // JSON/Serialization features can be added here for advanced storage options
+    static void displayAll(const std::vector<Student>& students);
+    static Student* searchStudent(std::vector<Student>& students, int rollNo);
+    static void deleteStudent(std::vector<Student>& students, int rollNo);
+    static void modifyStudent(std::vector<Student>& students, int rollNo);
 };
 
-#endif // STUDENT_HPP
+#endif /* STUDENT_HPP */
