@@ -1,160 +1,131 @@
-//  main.cpp
-//  StudentReports
-//
-//  Created by Jonathan Steele on 6/22/23.
-//
-
-#include "students.hpp"
+#include "student.hpp"
 #include <iostream>
 #include <fstream>
-#include <stdexcept>
+#include <vector>
+#include <memory>
 
-using namespace std;
-
-// Function declarations
 void displayMenu();
-void create_student();
-void display_sp(int); // Display particular record
-void display_all();   // Display all records
-void delete_student(int); // Delete particular record
-void change_student(int); // Edit particular record
+void createStudent(std::vector<std::shared_ptr<Student>>& students);
+void displayStudent(const std::vector<std::shared_ptr<Student>>& students, int rollNo);
+void displayAllStudents(const std::vector<std::shared_ptr<Student>>& students);
+void deleteStudent(std::vector<std::shared_ptr<Student>>& students, int rollNo);
+void modifyStudent(std::vector<std::shared_ptr<Student>>& students, int rollNo);
 
 int main() {
     try {
+        std::vector<std::shared_ptr<Student>> students;
         displayMenu();
-    } catch (const exception& e) {
-        cerr << "An error occurred: " << e.what() << endl;
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred: " << e.what() << std::endl;
     }
     return 0;
 }
 
 void displayMenu() {
-    char ch;
-    int num;
-    do {
-        cout << "\n\n\n\tMENU";
-        cout << "\n\n\t1. Create student record";
-        cout << "\n\n\t2. Search student record";
-        cout << "\n\n\t3. Display all student records";
-        cout << "\n\n\t4. Delete student record";
-        cout << "\n\n\t5. Modify student record";
-        cout << "\n\n\t6. Exit";
-        cout << "\n\n\tWhat is your choice (1/2/3/4/5/6)? ";
-        cin >> ch;
+    char choice;
+    int rollNo;
+    std::vector<std::shared_ptr<Student>> students;
 
-        switch (ch) {
+    do {
+        std::cout << "\n\n\t--- STUDENT MANAGEMENT SYSTEM ---";
+        std::cout << "\n\n\t1. Create Student Record";
+        std::cout << "\n\t2. Search Student Record";
+        std::cout << "\n\t3. Display All Student Records";
+        std::cout << "\n\t4. Delete Student Record";
+        std::cout << "\n\t5. Modify Student Record";
+        std::cout << "\n\t6. Exit";
+        std::cout << "\n\n\tEnter your choice (1-6): ";
+        std::cin >> choice;
+
+        switch (choice) {
             case '1':
-                create_student();
+                createStudent(students);
                 break;
             case '2':
-                cout << "\n\n\tEnter the roll number: ";
-                cin >> num;
-                display_sp(num);
+                std::cout << "\nEnter roll number: ";
+                std::cin >> rollNo;
+                displayStudent(students, rollNo);
                 break;
             case '3':
-                display_all();
+                displayAllStudents(students);
                 break;
             case '4':
-                cout << "\n\n\tEnter the roll number: ";
-                cin >> num;
-                delete_student(num);
+                std::cout << "\nEnter roll number: ";
+                std::cin >> rollNo;
+                deleteStudent(students, rollNo);
                 break;
             case '5':
-                cout << "\n\n\tEnter the roll number: ";
-                cin >> num;
-                change_student(num);
+                std::cout << "\nEnter roll number: ";
+                std::cin >> rollNo;
+                modifyStudent(students, rollNo);
                 break;
             case '6':
-                cout << "Exiting, thank you!";
+                std::cout << "Exiting program...";
                 break;
             default:
-                cout << "\n\n\tInvalid choice! Please try again.";
+                std::cout << "Invalid choice! Please try again.";
         }
-    } while (ch != '6');
+    } while (choice != '6');
 }
 
-void create_student() {
-    student stud;
-    ofstream oFile("student.dat", ios::binary | ios::app);
-    if (!oFile) {
-        throw runtime_error("File could not be opened!");
-    }
-    stud.getdata();
-    oFile.write(reinterpret_cast<char*>(&stud), sizeof(student));
-    cout << "\n\nStudent record has been created.";
+void createStudent(std::vector<std::shared_ptr<Student>>& students) {
+    auto stud = std::make_shared<Student>();
+    stud->inputData();
+    students.push_back(stud);
+    std::cout << "\nStudent record created successfully.\n";
 }
 
-void display_all() {
-    student stud;
-    ifstream inFile("student.dat", ios::binary);
-    if (!inFile) {
-        throw runtime_error("File could not be opened!");
-    }
-    cout << "\n\n\n\t\tDISPLAYING ALL RECORDS\n\n";
-    while (inFile.read(reinterpret_cast<char*>(&stud), sizeof(student))) {
-        stud.showdata();
-        cout << "\n\n====================================\n";
-    }
-}
-
-void display_sp(int n) {
-    student stud;
-    ifstream iFile("student.dat", ios::binary);
-    if (!iFile) {
-        throw runtime_error("File could not be opened!");
-    }
+void displayStudent(const std::vector<std::shared_ptr<Student>>& students, int rollNo) {
     bool found = false;
-    while (iFile.read(reinterpret_cast<char*>(&stud), sizeof(student))) {
-        if (stud.retrollno() == n) {
-            stud.showdata();
+    for (const auto& stud : students) {
+        if (stud->getRollNo() == rollNo) {
+            stud->displayData();
             found = true;
-            break; // Record found, no need to continue reading
+            break;
         }
     }
     if (!found) {
-        cout << "\n\nRecord does not exist.";
+        std::cout << "\nStudent record not found.\n";
     }
 }
 
-void change_student(int n) {
-    student stud;
-    fstream fl("student.dat", ios::binary | ios::in | ios::out);
-    if (!fl) {
-        throw runtime_error("File could not be opened!");
+void displayAllStudents(const std::vector<std::shared_ptr<Student>>& students) {
+    if (students.empty()) {
+        std::cout << "\nNo student records available.\n";
+    } else {
+        std::cout << "\n\n\tDISPLAYING ALL RECORDS\n\n";
+        for (const auto& stud : students) {
+            stud->displayData();
+            std::cout << "\n----------------------------------\n";
+        }
     }
+}
+
+void deleteStudent(std::vector<std::shared_ptr<Student>>& students, int rollNo) {
+    auto it = std::remove_if(students.begin(), students.end(),
+                             [rollNo](const std::shared_ptr<Student>& stud) {
+                                 return stud->getRollNo() == rollNo;
+                             });
+    if (it != students.end()) {
+        students.erase(it, students.end());
+        std::cout << "\nStudent record deleted.\n";
+    } else {
+        std::cout << "\nStudent record not found.\n";
+    }
+}
+
+void modifyStudent(std::vector<std::shared_ptr<Student>>& students, int rollNo) {
     bool found = false;
-    while (fl.read(reinterpret_cast<char*>(&stud), sizeof(student))) {
-        if (stud.retrollno() == n) {
-            stud.showdata();
-            cout << "\n\nEnter new student details:\n";
-            stud.getdata();
-            fl.seekp(-static_cast<int>(sizeof(student)), ios::cur); // Move back to the current record position
-            fl.write(reinterpret_cast<char*>(&stud), sizeof(student));
-            cout << "\n\n\tRecord updated.";
+    for (auto& stud : students) {
+        if (stud->getRollNo() == rollNo) {
+            std::cout << "\nModifying student record:";
+            stud->updateData();
+            std::cout << "\nRecord updated successfully.\n";
             found = true;
-            break; // Record found and updated, no need to continue reading
+            break;
         }
     }
     if (!found) {
-        cout << "\n\nRecord not found.";
+        std::cout << "\nStudent record not found.\n";
     }
-}
-
-void delete_student(int n) {
-    student stud;
-    ifstream iFile("student.dat", ios::binary);
-    if (!iFile) {
-        throw runtime_error("File could not be opened!");
-    }
-    ofstream oFile("Temp.dat", ios::binary);
-    while (iFile.read(reinterpret_cast<char*>(&stud), sizeof(student))) {
-        if (stud.retrollno() != n) {
-            oFile.write(reinterpret_cast<char*>(&stud), sizeof(student));
-        }
-    }
-    iFile.close();
-    oFile.close();
-    remove("student.dat");
-    rename("Temp.dat", "student.dat");
-    cout << "\n\n\tRecord deleted.";
 }
