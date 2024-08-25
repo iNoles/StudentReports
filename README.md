@@ -1,19 +1,24 @@
-# Student Record Management System
+# Student Records Management System
 
-A simple, console-based student record management system built in C++. This menu-driven application allows users to manage student records efficiently, providing functionalities for adding, viewing, editing, and deleting records.
+A C++ console-based application that manages student records with Create, Read, Update, and Delete (CRUD) operations. This project demonstrates file handling, object-oriented programming (OOP) principles, and basic data management techniques.
 
 ## Features
-- **Create Student Record**: Input and save student details, storing them securely in a file.
-- **Display Specific Record**: Search and display details of a specific student using their roll number.
-- **Display All Records**: View details of all students stored in the system.
-- **Modify Student Record**: Edit and update the details of an existing student record.
-- **Delete Student Record**: Remove a student record based on their roll number.
+
+- **Add Student Records**: Input student details like name, roll number, and marks.
+- **Display All Records**: View all stored student records in a formatted output.
+- **Search Student Records**: Find a specific student by their roll number.
+- **Delete Student Records**: Remove a student's data from the system.
+- **Modify Student Records**: Update existing student information.
+- **File Handling**: Records are saved and loaded using file operations for persistent storage.
 
 ## Prerequisites
 
-Make sure you have the following installed before running the project:
+To run this project, you need a C++ compiler like:
 
-- C++ Compiler
+- [GCC](https://gcc.gnu.org/)
+- [MinGW](http://www.mingw.org/) (for Windows)
+- [Clang](https://clang.llvm.org/)
+- Any C++ IDE like [Code::Blocks](http://www.codeblocks.org/), [Dev-C++](https://sourceforge.net/projects/orwelldevcpp/), [Visual Studio](https://visualstudio.microsoft.com/), etc.
 
 ## Getting Started
 
