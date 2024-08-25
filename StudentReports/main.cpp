@@ -1,131 +1,70 @@
-#include "student.hpp"
+#include "Student.hpp"
 #include <iostream>
-#include <fstream>
 #include <vector>
-#include <memory>
 
 void displayMenu();
-void createStudent(std::vector<std::shared_ptr<Student>>& students);
-void displayStudent(const std::vector<std::shared_ptr<Student>>& students, int rollNo);
-void displayAllStudents(const std::vector<std::shared_ptr<Student>>& students);
-void deleteStudent(std::vector<std::shared_ptr<Student>>& students, int rollNo);
-void modifyStudent(std::vector<std::shared_ptr<Student>>& students, int rollNo);
+void createStudent(std::vector<Student>& students);
+void handleChoice(std::vector<Student>& students, char choice);
 
 int main() {
-    try {
-        std::vector<std::shared_ptr<Student>> students;
+    std::vector<Student> students;
+    char choice;
+    do {
         displayMenu();
-    } catch (const std::exception& e) {
-        std::cerr << "An error occurred: " << e.what() << std::endl;
-    }
+        std::cin >> choice;
+        handleChoice(students, choice);
+    } while (choice != '6');
     return 0;
 }
 
 void displayMenu() {
-    char choice;
-    int rollNo;
-    std::vector<std::shared_ptr<Student>> students;
-
-    do {
-        std::cout << "\n\n\t--- STUDENT MANAGEMENT SYSTEM ---";
-        std::cout << "\n\n\t1. Create Student Record";
-        std::cout << "\n\t2. Search Student Record";
-        std::cout << "\n\t3. Display All Student Records";
-        std::cout << "\n\t4. Delete Student Record";
-        std::cout << "\n\t5. Modify Student Record";
-        std::cout << "\n\t6. Exit";
-        std::cout << "\n\n\tEnter your choice (1-6): ";
-        std::cin >> choice;
-
-        switch (choice) {
-            case '1':
-                createStudent(students);
-                break;
-            case '2':
-                std::cout << "\nEnter roll number: ";
-                std::cin >> rollNo;
-                displayStudent(students, rollNo);
-                break;
-            case '3':
-                displayAllStudents(students);
-                break;
-            case '4':
-                std::cout << "\nEnter roll number: ";
-                std::cin >> rollNo;
-                deleteStudent(students, rollNo);
-                break;
-            case '5':
-                std::cout << "\nEnter roll number: ";
-                std::cin >> rollNo;
-                modifyStudent(students, rollNo);
-                break;
-            case '6':
-                std::cout << "Exiting program...";
-                break;
-            default:
-                std::cout << "Invalid choice! Please try again.";
-        }
-    } while (choice != '6');
+    std::cout << "\n\n\n\tMENU"
+              << "\n\n1. Create student record"
+              << "\n2. Search student record"
+              << "\n3. Display all student records"
+              << "\n4. Delete student record"
+              << "\n5. Modify student record"
+              << "\n6. Exit"
+              << "\n\nYour choice: ";
 }
 
-void createStudent(std::vector<std::shared_ptr<Student>>& students) {
-    auto stud = std::make_shared<Student>();
-    stud->inputData();
+void createStudent(std::vector<Student>& students) {
+    Student stud;
+    stud.getData();
     students.push_back(stud);
-    std::cout << "\nStudent record created successfully.\n";
+    std::cout << "\nStudent record has been created.\n";
 }
 
-void displayStudent(const std::vector<std::shared_ptr<Student>>& students, int rollNo) {
-    bool found = false;
-    for (const auto& stud : students) {
-        if (stud->getRollNo() == rollNo) {
-            stud->displayData();
-            found = true;
+void handleChoice(std::vector<Student>& students, char choice) {
+    int rollNo;
+    switch (choice) {
+        case '1':
+            createStudent(students);
             break;
-        }
-    }
-    if (!found) {
-        std::cout << "\nStudent record not found.\n";
-    }
-}
-
-void displayAllStudents(const std::vector<std::shared_ptr<Student>>& students) {
-    if (students.empty()) {
-        std::cout << "\nNo student records available.\n";
-    } else {
-        std::cout << "\n\n\tDISPLAYING ALL RECORDS\n\n";
-        for (const auto& stud : students) {
-            stud->displayData();
-            std::cout << "\n----------------------------------\n";
-        }
-    }
-}
-
-void deleteStudent(std::vector<std::shared_ptr<Student>>& students, int rollNo) {
-    auto it = std::remove_if(students.begin(), students.end(),
-                             [rollNo](const std::shared_ptr<Student>& stud) {
-                                 return stud->getRollNo() == rollNo;
-                             });
-    if (it != students.end()) {
-        students.erase(it, students.end());
-        std::cout << "\nStudent record deleted.\n";
-    } else {
-        std::cout << "\nStudent record not found.\n";
-    }
-}
-
-void modifyStudent(std::vector<std::shared_ptr<Student>>& students, int rollNo) {
-    bool found = false;
-    for (auto& stud : students) {
-        if (stud->getRollNo() == rollNo) {
-            std::cout << "\nModifying student record:";
-            stud->updateData();
-            std::cout << "\nRecord updated successfully.\n";
-            found = true;
+        case '2':
+            std::cout << "\nEnter roll number: ";
+            std::cin >> rollNo;
+            if (Student* stud = Student::searchStudent(students, rollNo)) {
+                stud->showData();
+            }
             break;
-        }
-    }
-    if (!found) {
-        std::cout << "\nStudent record not found.\n";
+        case '3':
+            Student::displayAll(students);
+            break;
+        case '4':
+            std::cout << "\nEnter roll number: ";
+            std::cin >> rollNo;
+            Student::deleteStudent(students, rollNo);
+            break;
+        case '5':
+            std::cout << "\nEnter roll number: ";
+            std::cin >> rollNo;
+            Student::modifyStudent(students, rollNo);
+            break;
+        case '6':
+            std::cout << "Exiting, thank you!\n";
+            break;
+        default:
+            std::cout << "\nInvalid choice! Please try again.\n";
     }
 }
