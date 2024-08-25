@@ -1,28 +1,27 @@
-//  students.hpp
-//  StudentReports
-//
-//  Created by Jonathan Steele on 6/22/23.
-//
-
-#ifndef students_hpp
-#define students_hpp
+#ifndef STUDENT_HPP
+#define STUDENT_HPP
 
 #include <iostream>
-#include <cstring>
+#include <string>
 
-// The class that stores student data
-class student {
-    int rollno;
-    char name[50];
-    int eng_marks, math_marks, sci_marks, lang2_marks, cs_marks;
+class Student {
+private:
+    int rollNo;
+    std::string name;
+    int engMarks, mathMarks, sciMarks, lang2Marks, csMarks;
     double average;
     char grade;
 
-public:
-    void getdata();
-    void showdata() const;
-    void calculate();
-    int retrollno() const;
-}; // class ends here
+    void calculateGrade();
 
-#endif /* students_hpp */
+public:
+    Student();
+    void inputData();
+    void displayData() const;
+    int getRollNo() const;
+    void updateData();
+
+    // JSON/Serialization features can be added here for advanced storage options
+};
+
+#endif // STUDENT_HPP
