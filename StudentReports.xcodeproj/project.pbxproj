@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -102,7 +102,6 @@
 				};
 			};
 			buildConfigurationList = 71661E102A4522B000F5E8E2 /* Build configuration list for PBXProject "StudentReports" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -110,6 +109,7 @@
 				Base,
 			);
 			mainGroup = 71661E0C2A4522B000F5E8E2;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 71661E162A4522B000F5E8E2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
