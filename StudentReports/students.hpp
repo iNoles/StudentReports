@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <optional>
 
 class Student {
     int rollNo;
@@ -14,13 +15,17 @@ class Student {
     void calculate();
 
 public:
-    void getData();
+    Student(int rollNo, const std::string& name, int eng, int math, int sci, int lang2, int cs);
+    
     void showData() const;
     int getRollNo() const;
+    void updateMarks(int eng, int math, int sci, int lang2, int cs);
+
     static void displayAll(const std::vector<Student>& students);
-    static Student* searchStudent(std::vector<Student>& students, int rollNo);
+    static std::optional<std::reference_wrapper<Student>> searchStudent(std::vector<Student>& students, int rollNo);
     static void deleteStudent(std::vector<Student>& students, int rollNo);
     static void modifyStudent(std::vector<Student>& students, int rollNo);
+    static void displayTopPerformers(const std::vector<Student>& students);
 };
 
 #endif /* STUDENT_HPP */
