@@ -28,7 +28,7 @@ To run this project, you need a C++ compiler like:
    ```
 2. Navigate to the project directory:
    ```bash
-   cd StudentReports/StudentsReports
+   cd StudentReports
    ```
 3. Compile the source code:
    ```bash
