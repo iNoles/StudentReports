@@ -65,6 +65,8 @@ void handleChoice(std::vector<Student>& students, char choice) {
             std::cin >> rollNo;
             if (auto studOpt = Student::searchStudent(students, rollNo)) {
                 studOpt->get().showData();
+            } else {
+                std::cout << "\nRecord not found.\n";
             }
             break;
         case '3':
