@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <optional>
+#include <functional> // needed for std::reference_wrapper
 
 class Student {
     int rollNo;
@@ -19,10 +20,11 @@ public:
     
     void showData() const;
     int getRollNo() const;
-    void updateMarks(int eng, int math, int sci, int lang2, int cs);
 
+    bool updateMarks(int eng, int math, int sci, int lang2, int cs);
     static void displayAll(const std::vector<Student>& students);
-    static std::optional<std::reference_wrapper<Student>> searchStudent(std::vector<Student>& students, int rollNo);
+    static std::optional<std::reference_wrapper<Student>>
+    searchStudent(std::vector<Student>& students, int rollNo);
     static void deleteStudent(std::vector<Student>& students, int rollNo);
     static void modifyStudent(std::vector<Student>& students, int rollNo);
     static void displayTopPerformers(const std::vector<Student>& students);
