@@ -21,6 +21,7 @@ public:
     void showData() const;
     int getRollNo() const;
     double getAverage() const;
+    char getGrade() const;
 
     bool updateMarks(int eng, int math, int sci, int lang2, int cs);
     static void displayAll(const std::vector<Student>& students);
