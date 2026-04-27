@@ -144,9 +144,9 @@ void Student::displayTopPerformers(const std::vector<Student>& students) {
     for (const auto& s : students) sorted.push_back(s);
 
     std::sort(sorted.begin(), sorted.end(),
-              [](const Student& a, const Student& b) {
-                  return a.average > b.average;
-              });
+          [](const Student& a, const Student& b) {
+              return a.getAverage() > b.getAverage();
+          });
 
     int limit = std::min(3, static_cast<int>(sorted.size()));
 
