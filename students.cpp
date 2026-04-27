@@ -44,6 +44,10 @@ double Student::getAverage() const {
     return average;
 }
 
+char Student::getGrade() const {
+    return grade;
+}
+
 // ----------------------
 //  UPDATE MARKS
 // ----------------------
@@ -155,7 +159,7 @@ void Student::displayTopPerformers(const std::vector<Student>& students) {
     std::cout << "\n====================================\n";
 
     for (int i = 0; i < limit; i++) {
-        std::cout << "Rank #" << (i + 1) << " (" << sorted[i].get().grade << "):\n";
+        std::cout << "Rank #" << (i + 1) << " (" << sorted[i].get().getGrade() << "):\n";
         sorted[i].get().showData();
         std::cout << "\n------------------------------------\n";
     }
