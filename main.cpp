@@ -12,6 +12,11 @@ int main() {
     do {
         displayMenu();
         std::cin >> choice;
+        if (!std::cin) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            choice = '0';   // triggers default case in handleChoice
+        }
         handleChoice(students, choice);
     } while (choice != '7');
     return 0;
