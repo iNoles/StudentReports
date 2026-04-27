@@ -40,6 +40,10 @@ int Student::getRollNo() const {
     return rollNo;
 }
 
+double Student::getAverage() const {
+    return average;
+}
+
 // ----------------------
 //  UPDATE MARKS
 // ----------------------
