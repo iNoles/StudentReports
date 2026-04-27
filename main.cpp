@@ -9,16 +9,21 @@ void handleChoice(std::vector<Student>& students, char choice);
 int main() {
     std::vector<Student> students;
     char choice;
+
     do {
         displayMenu();
         std::cin >> choice;
+
         if (!std::cin) {
             std::cin.clear();
             std::cin.ignore(10000, '\n');
-            choice = '0';   // triggers default case in handleChoice
+            choice = '0';   // triggers default case
         }
+
         handleChoice(students, choice);
+
     } while (choice != '7');
+
     return 0;
 }
 
@@ -26,8 +31,8 @@ void displayMenu() {
     std::cout << "\n====================================";
     std::cout << "\n\t STUDENT MANAGEMENT SYSTEM";
     std::cout << "\n====================================";
-    std::cout << "\n 1.Create Student Record";
-    std::cout << "\n 2.Search Student Record";
+    std::cout << "\n 1. Create Student Record";
+    std::cout << "\n 2. Search Student Record";
     std::cout << "\n 3. Display All Student Records";
     std::cout << "\n 4. Delete Student Record";
     std::cout << "\n 5. Modify Student Record";
@@ -37,29 +42,54 @@ void displayMenu() {
     std::cout << "\nEnter your choice: ";
 }
 
-
 void createStudent(std::vector<Student>& students) {
     int rollNo, eng, math, sci, lang2, cs;
     std::string name;
 
     std::cout << "\nEnter roll number: ";
     std::cin >> rollNo;
-    std::cin.ignore();
+
+    if (!std::cin) {
+        std::cin.clear();
+        std::cin.ignore(10000, '\n');
+        std::cout << "\nInvalid roll number.\n";
+        return;
+    }
+
+    std::cin.ignore(10000, '\n'); // clear leftover newline
+
     std::cout << "Enter student name: ";
     std::getline(std::cin, name);
-    std::cout << "Enter marks for English, Math, Science, 2nd Language, and Computer Science:\n";
-    std::cin >> eng >> math >> sci >> lang2 >> cs;
 
-    students.emplace_back(rollNo, name, eng, math, sci, lang2, cs);
+    std::cout << "Enter marks for English, Math, Science, 2nd Language, and Computer Science:\n";
+
+    if (!(std::cin >> eng >> math >> sci >> lang2 >> cs)) {
+        std::cin.clear();
+        std::cin.ignore(10000, '\n');
+        std::cout << "\nInvalid marks. Must be numbers.\n";
+        return;
+    }
+
+    // Validate using your class logic
+    Student temp(rollNo, name, eng, math, sci, lang2, cs);
+
+    if (!temp.updateMarks(eng, math, sci, lang2, cs)) {
+        std::cout << "\nStudent not created due to invalid marks.\n";
+        return;
+    }
+
+    students.push_back(temp);
     std::cout << "\nStudent record has been created.\n";
 }
 
 void handleChoice(std::vector<Student>& students, char choice) {
     int rollNo;
+
     switch (choice) {
         case '1':
             createStudent(students);
             break;
+
         case '2':
             std::cout << "\nEnter roll number: ";
             std::cin >> rollNo;
@@ -69,25 +99,31 @@ void handleChoice(std::vector<Student>& students, char choice) {
                 std::cout << "\nRecord not found.\n";
             }
             break;
+
         case '3':
             Student::displayAll(students);
             break;
+
         case '4':
             std::cout << "\nEnter roll number: ";
             std::cin >> rollNo;
             Student::deleteStudent(students, rollNo);
             break;
+
         case '5':
             std::cout << "\nEnter roll number: ";
             std::cin >> rollNo;
             Student::modifyStudent(students, rollNo);
             break;
+
         case '6':
             Student::displayTopPerformers(students);
             break;
+
         case '7':
             std::cout << "Exiting, thank you!\n";
             break;
+
         default:
             std::cout << "\nInvalid choice! Please try again.\n";
     }
